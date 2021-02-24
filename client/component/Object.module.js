@@ -70,7 +70,7 @@ const Desk = (num) => {
       break;
     case 2:
       fbxLoader.load(
-        "./component/object/desk/desk_model/desk.fbx",
+        "./component/object/desk/desk2/table2.fbx",
         function (object) {
           object.scale.set(10, 10, 10);
           object.name = "desk";
@@ -103,7 +103,7 @@ const Chair = (num) => {
   switch (num) {
     case 1:
       fbxLoader.load(
-        "./component/object/chair/chair_armchair/Armchair Eichholtz Chair Davidoff N110121/chair1.fbx",
+        "./component/object/chair/chair1/chair1.fbx",
         function (object) {
           object.scale.set(10, 10, 10);
           object.name = "chair";
@@ -112,18 +112,15 @@ const Chair = (num) => {
       );
       break;
     case 2:
-      fbxLoader.load(
-        "./component/object/chair/chair_chair1/chair2.fbx",
-        function (object) {
-          object.scale.set(10, 10, 10);
-          object.name = "chair";
-          desk.push(object);
-        }
-      );
+      fbxLoader.load("./component/object/chair/chair2.fbx", function (object) {
+        object.scale.set(10, 10, 10);
+        object.name = "chair";
+        desk.push(object);
+      });
       break;
     case 3:
       fbxLoader.load(
-        "./component/object/chair/chair_seat/Seat 273-H1 C/chair3.fbx",
+        "./component/object/chair/chair3/chair3.fbx",
         function (object) {
           object.scale.set(10, 10, 10);
           object.name = "chair";
