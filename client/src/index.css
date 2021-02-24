@@ -1,0 +1,371 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+nav {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 120px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 80px;
+  background: white;
+  -webkit-box-shadow: 1px 1px 10px rgba(204, 204, 255, 0.5);
+          box-shadow: 1px 1px 10px rgba(204, 204, 255, 0.5);
+  z-index: 100;
+}
+
+nav .icon {
+  width: 112px;
+  min-width: 112px;
+  height: 60px;
+  min-height: 60px;
+  overflow: hidden;
+  margin-right: 90%;
+  background: url(icon.png);
+}
+
+nav #capture {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  background: url(icon.png);
+  background-position: -116px 10px;
+  background-size: 700px 980px;
+}
+
+.main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row;
+          flex-flow: row;
+}
+
+.main .containerBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 470px;
+  height: 100vh;
+  margin-top: 70px;
+  background: #f9f9fc;
+  border-right: 1px solid rgba(227, 227, 255, 0.7);
+  -webkit-box-shadow: 1px 1px 5px rgba(204, 204, 255, 0.7);
+          box-shadow: 1px 1px 5px rgba(204, 204, 255, 0.7);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.main .containerBox .leftbox {
+  position: relative;
+  width: 70px;
+  background: rgba(22, 22, 32, 0.7);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 50px;
+}
+
+.main .containerBox .leftbox button {
+  position: relative;
+  background: url(icon.png);
+  background-color: rgba(117, 117, 117, 0.5);
+  border: 1px solid rgba(22, 22, 32, 0.4);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.main .containerBox .leftbox button:hover {
+  background-color: rgba(117, 117, 117, 0.8);
+}
+
+.main .containerBox .leftbox .B1 {
+  background-position: 3px -227px;
+}
+
+.main .containerBox .leftbox .B1:active {
+  background-position: 3px -107px;
+}
+
+.main .containerBox .leftbox .B2 {
+  background-position: -529px -237px;
+}
+
+.main .containerBox .leftbox .B2:active {
+  background-position: -529px -116px;
+}
+
+.main .containerBox .leftbox .B3 {
+  background-position: -266px -234px;
+}
+
+.main .containerBox .leftbox .B3:active {
+  background-position: -266px -114px;
+}
+
+.main .containerBox .leftbox .B4 {
+  background-position: -137px -227px;
+}
+
+.main .containerBox .leftbox .B4:active {
+  background-position: -137px -107px;
+}
+
+.main .containerBox .rightbox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 400px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 50px;
+}
+
+.main .containerBox .rightbox .choice_modelbox {
+  position: relative;
+  width: 300px;
+  height: 900px;
+  background: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.main .containerBox .rightbox .choice_modelbox .readMe {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 100px 50px;
+}
+
+.main .containerBox .rightbox .choice_modelbox .readMe li {
+  list-style: square;
+  margin: 10px 0;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model {
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition-property: height;
+  transition-property: height;
+  -webkit-transition-duration: .5s;
+          transition-duration: .5s;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model.active {
+  height: 900px;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model .title {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  text-align: center;
+  line-height: 50px;
+  background: white;
+  z-index: 120;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model ul {
+  position: relative;
+  z-index: 120;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: white;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model ul li {
+  width: 80%;
+  margin: 20px 0;
+  height: 200px;
+  background: #d5d5f8;
+  cursor: pointer;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model ul li:hover {
+  background: #9c9cb4;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model ul li:active {
+  background: #bcbcda;
+}
+
+.main .containerBox .rightbox .choice_modelbox .choice_model ul li.disabled {
+  background: red;
+}
+
+.checkbox {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  background: url(icon.png);
+  background-color: #1f1ff7;
+  background-position: -402px -202px;
+  -webkit-box-shadow: 1px 1px 10px rgba(65, 105, 225, 0.651);
+          box-shadow: 1px 1px 10px rgba(65, 105, 225, 0.651);
+  right: 100px;
+  bottom: 100px;
+  z-index: 1000;
+}
+
+.checkbox.hover {
+  background-color: #0c0c5e;
+}
+
+.checkbox.active {
+  background-position: -402px -103px;
+}
+
+.a {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  background: url(icon.png);
+  background-color: #1f1ff7;
+  background-position: -402px -202px;
+  -webkit-box-shadow: 1px 1px 10px rgba(65, 105, 225, 0.651);
+          box-shadow: 1px 1px 10px rgba(65, 105, 225, 0.651);
+  right: 100px;
+  bottom: 100px;
+  z-index: 500;
+}
+
+.a .controlbox {
+  position: absolute;
+  top: 0;
+  left: -850px;
+  background: white;
+  -webkit-box-shadow: 1px 1px 10px rgba(185, 185, 185, 0.315);
+          box-shadow: 1px 1px 10px rgba(185, 185, 185, 0.315);
+  border-radius: 40px;
+  width: 800px;
+  height: 80px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  overflow: hidden;
+  z-index: 100;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+.a .controlbox.active {
+  width: 0;
+  left: 30px;
+}
+
+.a .controlbox button {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.a .controlbox button:hover {
+  background: rgba(22, 22, 32, 0.4);
+}
+
+.a .controlbox button:active {
+  background: rgba(22, 22, 32, 0.7);
+}
+
+.ThreeJs {
+  display: block;
+}
+/*# sourceMappingURL=index.css.map */
