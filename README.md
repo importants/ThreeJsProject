@@ -8,6 +8,6 @@
  npm install
  
  # example
-Cancel Changes
+
 https://user-images.githubusercontent.com/67934813/109386923-63da0600-7941-11eb-9622-25252b90562a.mp4
 
