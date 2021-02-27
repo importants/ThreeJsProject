@@ -1,26 +1,61 @@
 import * as THREE from "../node_modules/three/build/three.module.js";
-import * as OBJECT from "../component/Object.module.js";
-import { DragControls } from "../node_modules/three/examples/jsm/controls/DragControls.js";
-import { TransformControls } from "../node_modules/three/examples/jsm/controls/TransformControls.js";
+import { OBJLoader } from "../node_modules/three/examples/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "../node_modules/three/examples/jsm/loaders/MTLLoader.js";
+import { FBXLoader } from "../node_modules/three/examples/jsm/loaders/FBXLoader.js";
+
+let objLoader = new OBJLoader();
+let mtlLoader = new MTLLoader();
+let fbxLoader = new FBXLoader();
 
 let Front = document.getElementsByClassName("Front")[0];
 let Left = document.getElementsByClassName("Left")[0];
 let Right = document.getElementsByClassName("Right")[0];
 let Sky = document.getElementsByClassName("Sky")[0];
 let Back = document.getElementsByClassName("Back")[0];
+let Grid = document.getElementsByClassName("Grid")[0];
 let threeJs = document.getElementById("ThreeJs");
+let Value = document.getElementsByClassName("backColor")[0];
+let cancel = document.getElementsByClassName("cancel")[0];
+let desks = document.getElementsByClassName("desks")[0];
+let pictures = document.getElementsByClassName("pictures")[0];
+let windows = document.getElementsByClassName("windows")[0];
+let chairs = document.getElementsByClassName("chairs")[0];
+const right = new THREE.Euler(0, 0, 0, "XYZ");
+const left = new THREE.Euler(
+  -3.141592653589793,
+  4.440892098500626e-16,
+  -3.141592653589793,
+  "XYZ"
+);
+const closeLoadingPage = document.getElementsByClassName("closeLoadingPage")[0];
 let camera, scene, renderer;
 let mouse,
   raycaster,
   isShiftDown = false,
   optionClick = false;
 let rollOverMesh, rollOverMaterial;
-let rotationNum = 1; // 회전
+let rotationNum = 1;
 let changeR = false;
-const objects = []; // raycaster 해당 물체
-const load_object = []; // 물체 담기
-const save_object = []; // 물체 저장
+const objects = [];
+let load_object;
+let GridToggle = true;
+const save_object = [];
+const gridHelper = new THREE.GridHelper(1000, 20);
+let window1s = [];
+let window2s = [];
+let window3s = [];
+let desk1s = [];
+let desk2s = [];
+let desk3s = [];
+let picture1s = [];
+let picture2s = [];
+let picture3s = [];
+let chair1s = [];
+let chair2s = [];
+let chair3s = [];
+
 init();
+//loadingobject();
 
 function init() {
   camera = new THREE.PerspectiveCamera(
@@ -30,7 +65,7 @@ function init() {
     10000
   );
   camera.position.set(-2000, 1000, 0);
-  camera.lookAt(0, 0, 0); // 나중에 키보드나 클릭으로 전환해주는 function 만들기
+  camera.lookAt(0, 100, 0);
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color("rgb(243, 243, 253)");
@@ -45,16 +80,15 @@ function init() {
   rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
   scene.add(rollOverMesh);
 
-  //grid
-
-  const gridHelper = new THREE.GridHelper(1000, 20);
-  scene.add(gridHelper);
-
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
 
   // 벽면
   wallMake();
+
+  //grid
+
+  scene.add(gridHelper);
 
   // lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); //자연광
@@ -89,14 +123,27 @@ const desk1 = document.getElementsByClassName("desk1")[0];
 desk1.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Desk(1));
-    console.log(load_object);
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    desk1.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/desk/Desk_desk1/desk1.fbx",
+      function (object) {
+        object.scale.set(10, 10, 10);
+        object.name = "desk";
+        desk1s.push(object);
+        console.log(object);
+      }
+    );
+    load_object = desk1s.pop();
+    if (!load_object) {
+      desk1.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -105,13 +152,26 @@ const desk2 = document.getElementsByClassName("desk2")[0];
 desk2.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Desk(2));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    desk2.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/desk/desk2/table2.fbx",
+      function (object) {
+        object.scale.set(10, 10, 10);
+        object.name = "desk";
+        desk2s.push(object);
+      }
+    );
+    load_object = desk2s.pop();
+    if (!load_object) {
+      desk2.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -120,13 +180,26 @@ const desk3 = document.getElementsByClassName("desk3")[0];
 desk3.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Desk(3));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    desk3.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/desk/desk_tabledesk/Table desk N210820/desk3.fbx",
+      function (object) {
+        object.scale.set(10, 10, 10);
+        object.name = "desk";
+        desk3s.push(object);
+      }
+    );
+    load_object = desk3s.pop();
+    if (!load_object) {
+      desk3.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -135,13 +208,27 @@ const window1 = document.getElementsByClassName("window1")[0];
 window1.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Window(1));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    window1.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/window/VenetianBlind/VenetianBlind.fbx",
+      function (object) {
+        object.scale.set(5, 5, 5);
+        object.name = "window";
+        window1s.push(object);
+      }
+    );
+    load_object = window1s.pop();
+
+    if (!load_object) {
+      window1.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -150,13 +237,27 @@ const window2 = document.getElementsByClassName("window2")[0];
 window2.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Window(2));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    window2.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/window/window2-1/window2.fbx",
+      function (object) {
+        object.scale.set(5, 5, 5);
+        object.name = "window";
+        window2s.push(object);
+      }
+    );
+    load_object = window2s.pop();
+
+    if (!load_object) {
+      window2.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -165,13 +266,27 @@ const window3 = document.getElementsByClassName("window3")[0];
 window3.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Window(3));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    window3.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/window/window_mirror/Mirror/Mirror1.fbx",
+      function (object) {
+        object.scale.set(5, 5, 5);
+        object.name = "window";
+        window3s.push(object);
+      }
+    );
+    load_object = window3s.pop();
+
+    if (!load_object) {
+      window3.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -180,13 +295,27 @@ const picture1 = document.getElementsByClassName("picture1")[0];
 picture1.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Picture(1));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    picture1.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/frame/frame1/picture1.fbx",
+      function (object) {
+        object.scale.set(7, 7, 7);
+        object.name = "picture";
+        picture1s.push(object);
+      }
+    );
+    load_object = picture1s.pop();
+
+    if (!load_object) {
+      picture1.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -196,13 +325,27 @@ const picture2 = document.getElementsByClassName("picture2")[0];
 picture2.addEventListener(
   "click",
   function (e) {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Picture(2));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    picture2.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/frame/frame2/Arah Leaf Frame/Maps/frame2.fbx",
+      function (object) {
+        object.scale.set(5, 5, 5);
+        object.name = "picture";
+        picture2s.push(object);
+      }
+    );
+    load_object = picture2s.pop();
+
+    if (!load_object) {
+      picture2.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -211,13 +354,27 @@ const picture3 = document.getElementsByClassName("picture3")[0];
 picture3.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Picture(3));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    picture3.classList.add("disabled");
+    cancel.classList.add("active");
+    fbxLoader.load(
+      "./component/object/frame/frame3/Maps/frame3.fbx",
+      function (object) {
+        object.scale.set(5, 5, 5);
+        object.name = "picture";
+        picture3s.push(object);
+      }
+    );
+    load_object = picture3s.pop();
+
+    if (!load_object) {
+      picture3.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -227,13 +384,55 @@ const chair1 = document.getElementsByClassName("chair1")[0];
 chair1.addEventListener(
   "click",
   function () {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Chair(1));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    chair1.classList.add("disabled");
+    cancel.classList.add("active");
+    mtlLoader.setPath("./component/object/chair/chair1/");
+    mtlLoader.load(
+      "Arm chair.mtl",
+      function (materials) {
+        materials.preload();
+
+        objLoader.setMaterials(materials);
+
+        objLoader.setPath("./component/object/chair/chair1/");
+        objLoader.load(
+          "Arm chair.obj",
+          function (object) {
+            object.scale.set(7, 7, 7);
+            object.name = "chair";
+            chair1s.push(object);
+          },
+          function (xhr) {
+            console.log(
+              "OBJLoader: ",
+              (xhr.loaded / xhr.total) * 100,
+              "% loaded"
+            );
+          },
+          function (error) {
+            alert("모델을 로드 중 오류가 발생하였습니다.");
+          }
+        );
+      },
+      function (xhr) {
+        console.log("MTLLoader: ", (xhr.loaded / xhr.total) * 100, "% loaded");
+      },
+      function (error) {
+        console.error("MTLLoader 로드 중 오류가 발생하였습니다.", error);
+        alert("MTLLoader 로드 중 오류가 발생하였습니다.");
+      }
+    );
+    load_object = chair1s.pop();
+
+    if (!load_object) {
+      chair1.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -243,13 +442,55 @@ const chair2 = document.getElementsByClassName("chair2")[0];
 chair2.addEventListener(
   "click",
   function (e) {
-    if (load_object[load_object.length - 1]) {
-      return;
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Chair(2));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    chair2.classList.add("disabled");
+    cancel.classList.add("active");
+    mtlLoader.setPath("./component/object/chair/chair2-1/");
+    mtlLoader.load(
+      "de_sede_ds-414_swivel.mtl",
+      function (materials) {
+        materials.preload();
+
+        objLoader.setMaterials(materials);
+
+        objLoader.setPath("./component/object/chair/chair2-1/");
+        objLoader.load(
+          "de_sede_ds-414_swivel.obj",
+          function (object) {
+            object.scale.set(7, 7, 7);
+            object.name = "chair";
+            chair2s.push(object);
+          },
+          function (xhr) {
+            console.log(
+              "OBJLoader: ",
+              (xhr.loaded / xhr.total) * 100,
+              "% loaded"
+            );
+          },
+          function (error) {
+            alert("모델을 로드 중 오류가 발생하였습니다.");
+          }
+        );
+      },
+      function (xhr) {
+        console.log("MTLLoader: ", (xhr.loaded / xhr.total) * 100, "% loaded");
+      },
+      function (error) {
+        console.error("MTLLoader 로드 중 오류가 발생하였습니다.", error);
+        alert("MTLLoader 로드 중 오류가 발생하였습니다.");
+      }
+    );
+    load_object = chair2s.pop();
+
+    if (!load_object) {
+      chair2.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
@@ -258,23 +499,60 @@ const chair3 = document.getElementsByClassName("chair3")[0];
 chair3.addEventListener(
   "click",
   function (e) {
-    if (load_object[load_object.length - 1]) {
-      scene.remove(load_object[load_object.length - 1]);
-      load_object.pop();
+    if (load_object) {
+      removed();
+      scene.remove(load_object);
+      load_object = null;
     }
     optionClick = true;
-    load_object.push(OBJECT.Chair(3));
-    if (!load_object[load_object.length - 1]) {
-      load_object.pop();
+    chair3.classList.add("disabled");
+    cancel.classList.add("active");
+    mtlLoader.setPath("./component/object/chair/chair3/");
+    mtlLoader.load(
+      "Chaire.mtl",
+      function (materials) {
+        materials.preload();
+
+        objLoader.setMaterials(materials);
+        objLoader.setPath("./component/object/chair/chair3/");
+        objLoader.load(
+          "Chaire.obj",
+          function (object) {
+            object.scale.set(10, 10, 10);
+            object.name = "chair";
+            chair3s.push(object);
+          },
+          function (xhr) {
+            console.log(
+              "OBJLoader: ",
+              (xhr.loaded / xhr.total) * 100,
+              "% loaded"
+            );
+          },
+          function (error) {
+            alert("모델을 로드 중 오류가 발생하였습니다.");
+          }
+        );
+      },
+      function (xhr) {
+        console.log("MTLLoader: ", (xhr.loaded / xhr.total) * 100, "% loaded");
+      },
+      function (error) {
+        console.error("MTLLoader 로드 중 오류가 발생하였습니다.", error);
+        alert("MTLLoader 로드 중 오류가 발생하였습니다.");
+      }
+    );
+    load_object = chair3s.pop();
+
+    if (!load_object) {
+      chair3.classList.remove("disabled");
+      cancel.classList.remove("active");
     }
   },
   false
 );
 
-//function
-
 function wallMake() {
-  //책상일 때 바닥에 설치할 수 있게 나머지는 제거
   let geometry = [];
   let plane = [];
   for (let i = 0; i < 4; i++) {
@@ -292,7 +570,7 @@ function wallMake() {
         })
       );
     } else {
-      geometry[i] = new THREE.PlaneGeometry(1000, 500);
+      geometry[i] = new THREE.PlaneGeometry(1000, 600);
       plane[i] = new THREE.Mesh(
         geometry[i],
         new THREE.MeshBasicMaterial({
@@ -320,9 +598,9 @@ function wallMake() {
     scene.add(plane[i]);
     if (!i) {
     } else {
-      plane[i].position.y = +250;
+      plane[i].position.y += 300;
     }
-    objects.push(plane[i]); // 이 곳에 넣어서 배치할 수 있게 따로 빼서 만들기 // find
+    objects.push(plane[i]);
   }
 }
 
@@ -342,24 +620,62 @@ function onDocumentMouseMove(event) {
   raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObjects(objects);
-  let itemOne = load_object[load_object.length - 1];
+  let itemOne = load_object;
 
   if (intersects.length > 0) {
     const intersect = intersects[0];
     if (optionClick) {
       scene.remove(rollOverMesh);
       switch (intersect.object.name) {
-        case "Ground": // ground
+        case "Ground":
           if (!itemOne) break;
           if (itemOne.name === "desk" || itemOne.name === "chair") {
             itemOne.position.copy(intersect.point).add(intersect.face.normal);
-            itemOne.position
-              .divideScalar(50)
-              .floor()
-              .multiplyScalar(50)
-              .addScalar(25);
+
+            switch (itemOne.name) {
+              case "desk":
+                if (
+                  itemOne.rotation.equals(right) ||
+                  itemOne.rotation.equals(left)
+                ) {
+                  if (itemOne.position.x > 350) {
+                    itemOne.position.x = 350;
+                  } else if (itemOne.position.x < -330) {
+                    itemOne.position.x = -330;
+                  }
+                  if (itemOne.position.z > 410) {
+                    itemOne.position.z = 410;
+                  } else if (itemOne.position.z < -410) {
+                    itemOne.position.z = -410;
+                  }
+                } else {
+                  if (itemOne.position.x > 400) {
+                    itemOne.position.x = 400;
+                  } else if (itemOne.position.x < -400) {
+                    itemOne.position.x = -400;
+                  }
+                  if (itemOne.position.z > 330) {
+                    itemOne.position.z = 330;
+                  } else if (itemOne.position.z < -335) {
+                    itemOne.position.z = -335;
+                  }
+                }
+                break;
+              case "chair":
+                if (itemOne.position.x > 410) {
+                  itemOne.position.x = 410;
+                } else if (itemOne.position.x < -410) {
+                  itemOne.position.x = -410;
+                }
+                if (itemOne.position.z > 410) {
+                  itemOne.position.z = 410;
+                } else if (itemOne.position.z < -410) {
+                  itemOne.position.z = -410;
+                }
+                break;
+            }
+
             if (changeR) {
-              // 방향전환
               if (rotationNum === 0) {
                 itemOne.rotateY(Math.PI / 2);
                 rotationNum = 1;
@@ -411,13 +727,11 @@ function onDocumentMouseMove(event) {
               .floor()
               .multiplyScalar(50)
               .addScalar(25);
-
             itemOne.position.y = 150;
             scene.add(itemOne);
           }
           break;
         default:
-          // 아무것도 없음
           break;
       }
     } else {
@@ -446,47 +760,29 @@ function onDocumentMouseDown(event) {
 
   if (intersects.length > 0) {
     const intersect = intersects[0];
-
+    console.log(intersect);
     if (isShiftDown) {
     } else {
-      let itemOne = load_object[load_object.length - 1];
+      let itemOne = load_object;
       switch (intersect.object.name) {
-        case "Ground": // ground
+        case "Ground":
           if (itemOne.name === "desk" || itemOne.name === "chair") {
-            scene.add(itemOne);
-
-            objects.push(itemOne);
-            save_object.push(load_object.pop());
-
-            if (load_object)
-              for (let i = 0; i < objects.length; i++) {
-                load_object.pop();
-              }
-            optionClick = false;
+            addScene(itemOne);
           }
           break;
         case "N":
           if (itemOne.name === "window" || itemOne.name === "picture") {
-            scene.add(itemOne);
-            objects.push(itemOne);
-            save_object.push(load_object.pop());
-            optionClick = false;
+            addScene(itemOne);
           }
           break;
         case "E":
           if (itemOne.name === "window" || itemOne.name === "picture") {
-            scene.add(itemOne);
-            objects.push(itemOne);
-            save_object.push(load_object.pop());
-            optionClick = false;
+            addScene(itemOne);
           }
           break;
         case "W":
           if (itemOne.name === "window" || itemOne.name === "picture") {
-            scene.add(itemOne);
-            objects.push(itemOne);
-            save_object.push(load_object.pop());
-            optionClick = false;
+            addScene(itemOne);
           }
           break;
         default:
@@ -497,13 +793,23 @@ function onDocumentMouseDown(event) {
     render();
   }
 }
-function onDocumentMouseUp(event) {
-  //console.log(load_object);
+
+function addScene(itemOne) {
+  scene.add(itemOne);
+  objects.push(itemOne);
+  save_object.push(load_object);
+  load_object = null;
+  optionClick = false;
+}
+
+function onDocumentMouseUp() {
+  if (!load_object) {
+    removed();
+    cancel.classList.remove("active");
+  }
 }
 
 function onDocumentKeyDown(event) {
-  // 방향 만들기 & q e 이용해서 객체를 만든 뒤 q를 입력하면 -1를 입력하면 +1
-  // 1 가운데 2 왼쪽 3 뒤 4 오른쪽 만들어 주기
   switch (event.keyCode) {
     case 16:
       if (!isShiftDown) isShiftDown = true;
@@ -518,7 +824,6 @@ function onDocumentKeyDown(event) {
       rotationNum--;
       console.log(rotationNum);
       changeR = true;
-
       break;
     case 69: // e 오른쪽으로 회전
       if (rotationNum != 1) {
@@ -528,40 +833,53 @@ function onDocumentKeyDown(event) {
       console.log(rotationNum);
       changeR = true;
       break;
-    case 37:
+    case 37: //옆
       console.log("left");
       camera.position.set(0, 1000, -2000);
-      camera.lookAt(0, 0, 0);
+      camera.lookAt(0, 100, 0);
       render();
-      break; //옆
-    case 38:
+      break;
+    case 38: //위
       console.log("front");
       camera.position.set(-2000, 1000, 0);
-      camera.lookAt(0, 0, 0);
+      camera.lookAt(0, 100, 0);
       render();
-      break; //위
-    case 39:
+      break;
+    case 39: //오른쪽
       console.log("right");
       camera.position.set(0, 1000, 2000);
-      camera.lookAt(0, 0, 0);
+      camera.lookAt(0, 100, 0);
       render();
-      break; //오른쪽
-    case 40:
+      break;
+    case 40: //아래
       console.log("sky");
       camera.position.set(0, 3000, 0);
       camera.lookAt(1, 0, 0);
       render();
-      break; //아래
+      break;
     case 68: // 물체 삭제
       console.log("delete");
-      if (!save_object) alert("사물이 존재하지 않습니다");
+      if (!save_object.length) {
+        alert("배치된 사물이 없습니다");
+        break;
+      }
+      console.log(save_object);
       scene.remove(save_object.pop());
       break;
     case 83: // 물체 취소
       console.log("cancel");
-      if (!save_object) alert("사물이 존재하지 않습니다");
-      scene.remove(load_object[load_object.length - 1]);
-      load_object.pop();
+      if (!load_object) {
+        alert("선택한 사물이 존재하지 않습니다");
+        break;
+      }
+      scene.remove(load_object);
+
+      load_object = null;
+
+      if (!load_object) {
+        cancel.classList.remove("active");
+        removed();
+      }
       break;
   }
 }
@@ -569,18 +887,17 @@ function onDocumentKeyDown(event) {
 function onDocumentKeyUp(event) {
   switch (event.keyCode) {
     case 65:
-      console.log(load_object);
+      console.log(save_object);
       break;
   }
 }
 
-// 방향-> 나중에 버튼 없애고 다른 것으로 전환
 Front.addEventListener(
   "click",
   function (e) {
     console.log("front");
     camera.position.set(-2000, 1000, 0);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 100, 0);
   },
   false
 );
@@ -589,7 +906,7 @@ Left.addEventListener(
   function (e) {
     console.log("left");
     camera.position.set(0, 1000, -2000);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 100, 0);
   },
   false
 );
@@ -598,7 +915,7 @@ Right.addEventListener(
   function (e) {
     console.log("right");
     camera.position.set(0, 1000, 2000);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 100, 0);
   },
   false
 );
@@ -607,25 +924,69 @@ Sky.addEventListener(
   function (e) {
     console.log("sky");
     camera.position.set(0, 3000, 0);
-    camera.lookAt(1, 0, 0);
+    camera.lookAt(0, 100, 0);
   },
   false
 );
 Back.addEventListener(
   "click",
   function (e) {
+    if (!save_object.length) return alert("배치된 사물이 없습니다");
     scene.remove(save_object.pop());
   },
   false
 );
 
-let Value = document.getElementsByClassName("backColor")[0];
+Grid.addEventListener(
+  "click",
+  function (e) {
+    if (GridToggle) {
+      scene.remove(gridHelper);
+      GridToggle = false;
+    } else {
+      scene.add(gridHelper);
+      GridToggle = true;
+    }
+    render();
+  },
+  false
+);
+
 Value.addEventListener("input", function (e) {
   console.log(Value.value);
-  scene.children[3].material.color.set(Value.value);
-  scene.children[4].material.color.set(Value.value);
-  scene.children[5].material.color.set(Value.value);
+  for (let i = 2; i < 5; i++) {
+    scene.children[i].material.color.set(Value.value);
+  }
 });
+
+cancel.addEventListener(
+  "click",
+  function () {
+    if (!load_object) return alert("선택한 사물이 없습니다");
+    scene.remove(load_object);
+    load_object = null;
+    cancel.classList.remove("active");
+    removed();
+  },
+  false
+);
+
+function removed() {
+  for (let i = 1; i < 6; i += 2) {
+    desks.childNodes[i].classList.remove("disabled");
+    windows.childNodes[i].classList.remove("disabled");
+    pictures.childNodes[i].classList.remove("disabled");
+    chairs.childNodes[i].classList.remove("disabled");
+  }
+}
+
+closeLoadingPage.addEventListener(
+  "click",
+  function () {
+    console.log(scene);
+  },
+  false
+);
 
 function render() {
   renderer.render(scene, camera);
